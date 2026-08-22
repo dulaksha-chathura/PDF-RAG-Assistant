@@ -38,8 +38,8 @@ Question → Gemini Embedding → Vector Search → Top 5 Chunks → Gemini Flas
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/gemini-pdf-rag.git
-cd gemini-pdf-rag
+git clone https://github.com/dulaksha-chathura/PDF-RAG-Assistant.git
+cd PDF-RAG-Assistant
 ```
 
 ### 2. Install Dependencies
