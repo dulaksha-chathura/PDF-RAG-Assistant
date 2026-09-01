@@ -1,39 +1,59 @@
-# 📄 Native Gemini PDF RAG Assistant
+# 📄 PDF RAG Assistant (Native & Agentic Architecture)
 
-A lightweight **PDF RAG (Retrieval-Augmented Generation)** assistant built with **Streamlit**, **Google Gemini**, and **Neon PostgreSQL + pgvector**.
+A lightweight, high-performance **PDF RAG (Retrieval-Augmented Generation)** assistant built with **Streamlit**, **Google Gemini**, and **Neon PostgreSQL (`pgvector`)**.
 
-Upload a PDF and ask questions about its contents using semantic vector search and Gemini.
+The repository supports both a **Native Execution Mode** for simple deployment and an **Agentic Microservices Mode** utilizing **FastMCP** and **LangChain** for decoupled, tool-driven document reasoning.
+
+---
 
 ## ✨ Features
 
-* 📄 Upload and process multi-page PDFs
-* 🔍 Semantic search using `pgvector`
-* 🤖 Gemini-powered question answering
-* 🧠 `gemini-embedding-001` embeddings with 768 dimensions
-* 🔒 PDF text extraction performed locally using `pypdf`
-* 📱 Designed for low network usage
+* 📄 **Local PDF Ingestion:** Fast multi-page PDF text extraction using `pypdf`.
+* 🔍 **Vector Similarity Search:** High-accuracy semantic retrieval via `pgvector` and 768-dimensional `gemini-embedding-001` embeddings.
+* 🤖 **Dual Architecture:**
 
-## 🏗️ Architecture
+  * **Native Mode:** Lightweight, direct integration with Gemini.
+  * **Agentic Mode:** Decoupled FastMCP tool server orchestrated via a LangChain agent reasoning loop.
+* 🔒 **Data Privacy:** Local document parsing ensures raw PDF contents remain secure on your machine.
 
-### Document Ingestion
+---
 
-```text
-PDF → pypdf → Text Chunks → Gemini Embeddings → Neon PostgreSQL
-```
+## 🏗️ Architecture Modes
 
-### Question Answering
+### 1. Native Execution Pipeline
 
 ```text
-Question → Gemini Embedding → Vector Search → Top 5 Chunks → Gemini Flash → Answer
+[Document Ingestion]
+PDF → pypdf → Text Chunks → Gemini Embeddings → Neon PostgreSQL (pgvector)
+
+[Question Answering]
+User Question → Gemini Embedding → pgvector Search → Context Chunks → Gemini Flash → Answer
 ```
 
-## 🧰 Requirements
+### 2. Agentic Microservice Pipeline
 
-* Python 3.10+
-* Google Gemini API key
-* Neon PostgreSQL database with `pgvector`
+```text
+[Decoupled Tool Layer]
+FastMCP Server → search_pdf_documents Tool → Neon PostgreSQL (pgvector)
 
-## 🚀 Installation
+[Agentic Reasoning Loop]
+Streamlit UI → LangChain Agent → JSON-RPC → FastMCP Server → Grounded Answer
+```
+
+---
+
+## 🧰 Tech Stack
+
+* **Language & Framework:** Python 3.10+, Streamlit
+* **Agentic Framework:** LangChain (`langchain-google-genai`, `langchain-mcp-adapters`)
+* **Tool Server:** FastMCP (`fastmcp`, `mcp`)
+* **LLM & Embeddings:** Google Gemini API (`gemini-1.5-flash`, `gemini-embedding-001`)
+* **Vector Database:** Neon PostgreSQL with `pgvector`
+* **PDF Parsing:** `pypdf`
+
+---
+
+## 🚀 Installation & Setup
 
 ### 1. Clone the Repository
 
@@ -45,35 +65,23 @@ cd PDF-RAG-Assistant
 ### 2. Install Dependencies
 
 ```bash
-pip install streamlit psycopg2-binary pypdf google-genai
+pip install -r requirements.txt
 ```
 
 ### 3. Configure Credentials
 
-Create:
+Create `.streamlit/secrets.toml` or a local `.env` file:
 
-```text
-.streamlit/secrets.toml
-```
-
-Add your credentials:
-
-```toml
+```env
 GEMINI_API_KEY = "your-gemini-api-key"
 NEON_DATABASE_URL = "your-neon-postgresql-url"
 ```
 
-### 4. Run the Application
+---
 
-```bash
-streamlit run app.py
-```
+## 🗄️ Database Setup
 
-Open the Streamlit URL shown in the terminal and start using the PDF RAG assistant.
-
-## 🗄️ Database
-
-The application automatically enables `pgvector` and creates the required table when it starts:
+The application automatically enables `pgvector` and initializes the table upon launch:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector;
@@ -85,16 +93,29 @@ CREATE TABLE IF NOT EXISTS pdf_documents (
 );
 ```
 
-## 🧰 Tech Stack
+---
 
-* **Python**
-* **Streamlit**
-* **Google Gemini API**
+## 🏃 Execution Options
 
-  * `gemini-3.5-flash`
-  * `gemini-embedding-001`
-* **Neon PostgreSQL**
-* **pgvector**
-* **pypdf**
+### Option A: Run Native Streamlit App
+
+```bash
+streamlit run app.py
+```
+
+### Option B: Run Agentic Mode
+
+**1. Start the FastMCP Server (Terminal 1):**
+
+```bash
+python mcp_server.py
+```
+
+**2. Run the Agentic Streamlit UI (Terminal 2):**
+
+```bash
+streamlit run app.py -- --mode agentic
+```
+
 
 
