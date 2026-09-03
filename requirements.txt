@@ -1,4 +1,22 @@
-streamlit
-psycopg2-binary
-pypdf
-google-genai
+# --- Core Application & UI ---
+streamlit>=1.30.0
+
+# --- Database & Vector Storage ---
+psycopg2-binary>=2.9.9
+pgvector>=0.2.4
+
+# --- LLM & Google Gemini SDK ---
+google-genai>=0.1.0
+
+# --- Document Parsing & Text Processing ---
+pypdf>=4.0.0
+
+# --- LangChain & MCP Agent System ---
+langchain>=0.1.0
+langchain-core>=0.1.0
+langchain-google-genai>=1.0.0
+mcp>=1.0.0
+
+# --- Environment & Utilities ---
+python-dotenv>=1.0.0
+pydantic>=2.0.0
