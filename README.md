@@ -116,6 +116,11 @@ python mcp_server.py
 ```bash
 streamlit run app.py -- --mode agentic
 ```
+<p align="center">
+  <img src="assets/native_app.png" alt="Native Streamlit App" width="100%">
+  <br>
+  <em>Figure: Native Streamlit App Interface</em>
+</p>
 
 
 
