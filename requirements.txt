@@ -1,0 +1,19 @@
+# --- Core UI & Environment ---
+streamlit>=1.35.0
+python-dotenv>=1.0.1
+
+# --- Google Gemini SDK ---
+google-genai>=0.1.1
+
+# --- Agentic Framework & MCP Adapters ---
+langchain>=0.2.0
+langchain-google-genai>=1.0.5
+langchain-mcp-adapters>=0.1.0
+fastmcp>=0.1.0
+mcp>=1.0.0
+
+# --- Vector Database & Storage ---
+psycopg2-binary>=2.9.9
+
+# --- PDF Parsing ---
+pypdf>=4.2.0
